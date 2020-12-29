@@ -39,7 +39,7 @@
         <a href="<?= base_url() ?>">Kembali ke halaman utama</a>
       </p>
 
-      <form class="search-form">
+      <!-- <form class="search-form">
         <div class="input-group">
           <input type="text" name="search" class="form-control" placeholder="Search">
           <div class="input-group-append">
@@ -47,7 +47,7 @@
             </button>
           </div>
         </div>
-      </form>
+      </form> -->
     </div>
   </div>
 

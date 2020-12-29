@@ -206,33 +206,34 @@ class Wandalibs
     $CI = &get_instance();
     //load library send email CodeIgniter
     $CI->load->library('email');
+    $config = [
+      'protocol'      => 'smtp',
+      'smtp_host'     => 'ssl://smtp.googlemail.com',
+      'smtp_user'     => 'natrium.space007@gmail.com',
+      'smtp_pass'     => 'SB33JFCJ67HP',
+      // 'smtp_port'     =>  587,
+      'smtp_port'     =>  465,
+      'mailtype'      => 'html',
+      'charset'       => 'utf-8'
+    ];
+
     // $config = [
     //   'protocol'      => 'smtp',
-    //   'smtp_host'     => 'ssl://smtp.googlemail.com',
-    //   'smtp_user'     => 'promkesrsutangsel@gmail.com',
-    //   'smtp_pass'     => 'PkRs2017',
+    //   'smtp_crypto'   => 'tls',
+    //   'smtp_host'     => 'smtp.googlemail.com',
+    //   'smtp_user'     => 'natrium.space007@gmail.com',
+    //   'smtp_pass'     => 'SB33JFCJ67HP',
+    //   // 'smtp_port'     =>  587,
     //   'smtp_port'     =>  465,
     //   'mailtype'      => 'html',
     //   'charset'       => 'utf-8'
     // ];
 
-    $config = [
-      'protocol'      => 'smtp',
-      'smtp_crypto'   => 'tls',
-      'smtp_host'     => 'smtp.googlemail.com',
-      'smtp_user'     => 'promkesrsutangsel@gmail.com',
-      'smtp_pass'     => 'PkRs2017',
-      'smtp_port'     =>  587,
-      // 'smtp_port'     =>  465,
-      'mailtype'      => 'html',
-      'charset'       => 'utf-8'
-    ];
-
     //verify/inisialisasi smtp port di server localhost
     $CI->email->initialize($config);
     $CI->email->set_newline("\r\n");
 
-    $CI->email->from('promkesrsutangsel@gmail.com', 'Promkes RSU Tangsel');
+    $CI->email->from('natrium.space007@gmail.com', 'Promkes RSU Tangsel');
     $CI->email->to($CI->input->post('email'));
     $pesan_keluar   = $CI->input->post('pesan_keluar');
     $pesan_balasan   = '
@@ -260,7 +261,7 @@ class Wandalibs
           <div class="card-body">
             <h5>Hallo,</h5>
             <p>Ada pengaduan masuk loh, yuk segera cek dengan klik tombol dibawah ini</p>
-            <a href="https://instagram.com/rsu_tangsel/"><button style="background-color="#009999"; color="#fff";">Cek Sekarang</button></a>
+            <a href="#"><button style="background-color="#009999"; color="#fff";">Cek Sekarang</button></a>
           </div>
       </div>
     </body>
@@ -270,10 +271,10 @@ class Wandalibs
     /* Note: Cek type email | Author: wandaazhar@gmail.com */
     if ($type == 'verify') {
       $CI->email->subject('Verifikasi Akun Layanan Pengaduan RSU Kota Tangerang Selatan (NO REPLY)');
-      $CI->email->message('<h3 style="color: blue;">Terimakasih Anda telah mendaftar <br> Klik Link ini untuk verifikasi akun Anda : <h3> <br> <h3>Password Anda adalah: </h3> <a href="' . base_url() . 'auth/pageVerifikasiAkun?email=' . $CI->input->post('email') . '&token=' . urlencode($token) . '"><button style="color: #fff; background-color: blue;" >Aktikan</button></a>');
+      $CI->email->message('<h3 style="color: blue;">Terimakasih Anda telah mendaftar <br> Klik Link ini untuk verifikasi akun Anda : <h3> <br> <h3> </h3> <a href="' . base_url() . 'auth/pageVerifikasiAkun?email=' . $CI->input->post('email') . '&token=' . urlencode($token) . '"><button style="color: #fff; background-color: blue;" >Aktikan</button></a>');
     } else if ($type == 'forgot') {
       $CI->email->subject('Reset Password Layanan Pengaduan RSU Kota Tangerang Selatan (NO REPLY)');
-      $CI->email->message('<h3 style="color: blue;">Hallo<br> Klik Link ini untuk mereset password kamu: <h3> <a href="' . base_url() . 'register/resetPassword?email=' . $CI->input->post('email') . '&token=' . urlencode($token) . '"><button style="color: #fff; background-color: blue;" >Reset Password</button></a>');
+      $CI->email->message('<h3 style="color: blue;">Hallo<br> Klik Link ini untuk mereset password kamu: <h3> <a href="' . base_url() . 'auth/pageResetPassword?email=' . $CI->input->post('email') . '&token=' . urlencode($token) . '"><button style="color: #fff; background-color: blue;" >Reset Password</button></a>');
     } else if ($type == 'compose') {
       $CI->email->subject('Layanan Pengaduan RSU Kota Tangerang Selatan (NO REPLY)');
       $CI->email->message($pesan_keluar);
@@ -299,8 +300,8 @@ class Wandalibs
     $config = [
       'protocol'      => 'smtp',
       'smtp_host'     => 'ssl://smtp.googlemail.com',
-      'smtp_user'     => 'promkesrsutangsel@gmail.com',
-      'smtp_pass'     => 'PkRs2017',
+      'smtp_user'     => 'natrium.space007@gmail.com',
+      'smtp_pass'     => 'SB33JFCJ67HP',
       'smtp_port'     =>  465,
       'mailtype'      => 'html',
       'charset'       => 'utf-8'
@@ -322,7 +323,7 @@ class Wandalibs
     $CI->email->initialize($config);
     $CI->email->set_newline("\r\n");
 
-    $CI->email->from('promkesrsutangsel@gmail.com', 'Promkes RSU Tangsel');
+    $CI->email->from('natrium.space007@gmail.com', 'Promkes RSU Tangsel');
     // $CI->email->to($CI->input->post('email'));
     $CI->email->to($email);
     // $pesan_keluar   = $CI->input->post('pesan_keluar');

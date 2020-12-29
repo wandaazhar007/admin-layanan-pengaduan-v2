@@ -8,7 +8,6 @@
   <title>Selamat Datang</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
   <!-- Font Awesome -->
   <link rel="stylesheet" href="<?php echo base_url() ?>/assets/plugins/fontawesome-free/css/all.min.css">
   <!-- Ionicons -->
@@ -34,45 +33,27 @@
       <a href="#"><b>Selamat Datang</b></a>
     </div>
 
-    <div class="lockscreen-name" style="margin-top: -15px; padding-bottom: 20px;"><?php echo $this->input->get('email') ?></div>
+    <div class="lockscreen-name" style="margin-top: -15px; padding-bottom: 20px;"><?php echo htmlentities($getEmail->nama) ?></div>
+    <div class="lockscreen-name" style="margin-top: -15px; padding-bottom: 20px;"><?php echo htmlentities($this->input->get('email')) ?></div>
 
-
-    <div class="lockscreen-item mt-0">
-
-      <div class="lockscreen-image">
-        <img src="<?php echo base_url('/assets/img/profile-user/') . $getEmail->foto ?>" alt="User Image">
-      </div>
-
-      <form class="lockscreen-credentials" action="<?php echo base_url('auth/loginFirstTime') ?>" method="post">
-        <div class="input-group">
-          <input type="hidden" name="email" class="form-control" value="<?php echo $this->input->get('email') ?>">
-          <input type="password" name="password" class="form-control" placeholder="password">
-          <div class="input-group-append">
-            <button type="submit" class="btn"><i class="fas fa-arrow-right text-muted"></i></button>
-          </div>
-          <small class="text-danger font-italic"><?php echo form_error('password') ?></small>
-        </div>
-      </form>
-
+    <div class="help-block text-center text-muted text-sm">
+      <a href="<?php echo base_url('auth/login') ?>">
+        <button class="btn btn-tosca">Login</button>
+      </a>
     </div>
-    <small class="text-danger font-italic text-center" style="margin-top: -20px; margin-left: auto; margin-right: auto; width: 50%; display: flex;"><?php echo form_error('password') ?></small>
 
-    <div class="help-block text-center text-muted text-sm ml-5">
-      Silahkan masukan password Anda
-    </div>
+
     <div class="lockscreen-footer text-center text-muted mt-5">
       Copyright &copy; 2020 <b><a href="#" class="text-muted">RSU Kota Tangerang Selatan</a></b><br>
       All rights reserved
     </div>
-  </div>
 
-
-  <!-- jQuery -->
-  <script src="<?php echo base_url() ?>/assets/plugins/jquery/jquery.min.js"></script>
-  <!-- Bootstrap 4 -->
-  <script src="<?php echo base_url() ?>/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <!-- AdminLTE App -->
-  <script src="<?php echo base_url() ?>/assets/dist/js/adminlte.min.js"></script>
+    <!-- jQuery -->
+    <script src="<?php echo base_url() ?>/assets/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="<?php echo base_url() ?>/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="<?php echo base_url() ?>/assets/dist/js/adminlte.min.js"></script>
 </body>
 
 </html>

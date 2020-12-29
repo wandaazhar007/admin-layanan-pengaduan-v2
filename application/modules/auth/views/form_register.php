@@ -58,7 +58,7 @@
 
           <div class="input-group mb-3 input-group-sm">
             <select class="form-control" style="width: 100%;" name="bidang">
-              <option>-Pilih Bidang-</option>
+              <option value="" selected disabled>Pilih Bidang:</option>
               <option value="pelayanan medis">Pelayanan Medis</option>
               <option value="penunjang">Penunjang</option>
               <option value="keperawatan">Keperawatan</option>
@@ -93,7 +93,7 @@
               <div class="icheck-primary input-group-sm">
                 <input type="checkbox" id="agreeTerms" name="terms" value="agree">
                 <label for="agreeTerms">
-                  <small class="text-muted">Saya setuju dengan <a href="<?= base_url('auth/ketentuanRegisterUserAdmin') ?>">Ketentuan</a></small>
+                  <small class="text-muted">Saya setuju dengan <a href="<?= base_url('auth/ketentuanRegisterUserAdmin') ?>" target="_blank">Ketentuan</a></small>
                   <small class="text-danger font-italic"><?php echo form_error('terms') ?></small>
                 </label>
               </div>

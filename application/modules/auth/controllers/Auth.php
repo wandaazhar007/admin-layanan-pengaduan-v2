@@ -32,42 +32,6 @@ class Auth extends MX_Controller
     }
   }
 
-  /* Note: Function untuk logout user ada di libraries/wandalibs.php | Author: wandaazhar@gmail.com */
-  function logout()
-  {
-    $this->wandalibs->_doLogout();
-  }
-
-  /* Note: Function untuk verifikasi akun user dengan send email | Author: wandaazhar@gmail.com */
-  function pageVerifikasiAkun()
-  {
-    $email = $this->input->get('email');
-    $token = $this->input->get('token');
-    $query = $this->db->get_where('form_token', ['token' => $token])->row_array();
-
-    if ($token != $query['token']) {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible">
-      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-      <i class="icon fa fa-exclamation-triangle"></i><small><b>Ups!.</b>Email ' . $email . ' sudah diverifkasi sebelumnya</small>
-    </div>');
-      redirect('auth/pageBlocked');
-    }
-    if ($email != $query['email']) {
-      $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible">
-      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-      <i class="icon fa fa-exclamation-triangle"></i><small><b>Ups!.</b>Email ' . $email . ' sudah tidak terdaftar</small>
-    </div>');
-      redirect('auth/pageBlocked');
-    } else {
-      $this->db->set('active', 'aktif');
-      $this->db->where('email', $email);
-      $this->db->update('tb_user_admin');
-      $data['title']    = 'Selamat Datang';
-      $data['getEmail'] = $this->db->get_where('tb_user_admin', ['email' => $email])->row_object();
-      $this->load->view('v_verifikasi', $data);
-    }
-  }
-
   /* Note: Function untuk record login user | Author: wandaazhar@gmail.com */
   function loginFirstTime()
   {
@@ -87,12 +51,6 @@ class Auth extends MX_Controller
     } else {
       $this->wandalibs->_loginProcessFirstTime();
     }
-  }
-
-  /* Note: Function untuk menampilkan halaman blocked jika ada user yag mencoba akses tanpa token | Author: wandaazhar@gmail.com */
-  function pageBlocked()
-  {
-    $this->load->view('v_blocked');
   }
 
   /* Note: Function untuk registrasi user menggunakan send email | Author: wandaazhar@gmail.com */
@@ -138,7 +96,7 @@ class Auth extends MX_Controller
         'email'       => $email,
         'password'    => $password,
         'bidang'      => $bidang,
-        'user_access' => $bidang,
+        'user_access' => 'pengguna',
         'foto'        => 'default-avatar.png',
         'password'    => $password,
         'date_created' => time(),
@@ -163,11 +121,44 @@ class Auth extends MX_Controller
     }
   }
 
+  /* Note: Function untuk verifikasi akun user dengan send email | Author: wandaazhar@gmail.com */
+  function pageVerifikasiAkun()
+  {
+    $email = $this->input->get('email');
+    $token = $this->input->get('token');
+    $query = $this->db->get_where('form_token', ['token' => $token])->row_array();
+
+    if ($token != $query['token']) {
+      $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+      <i class="icon fa fa-exclamation-triangle"></i><small><b>Ups!.</b>Email ' . $email . ' sudah diverifkasi sebelumnya</small>
+    </div>');
+      redirect('auth/pageBlocked');
+    }
+    if ($email != $query['email']) {
+      $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+      <i class="icon fa fa-exclamation-triangle"></i><small><b>Ups!.</b>Email ' . $email . ' sudah tidak terdaftar</small>
+    </div>');
+      redirect('auth/pageBlocked');
+    } else {
+      $this->db->set('active', 'aktif');
+      $this->db->where('email', $email);
+      $this->db->update('tb_user_admin');
+
+      $this->db->delete('form_token', ['email' => $email]);
+      $data['title']    = 'Selamat Datang';
+      $data['getEmail'] = $this->db->get_where('tb_user_admin', ['email' => $email])->row_object();
+      $this->load->view('v_verifikasi', $data);
+    }
+  }
+
   /* Note: function untuk lupa password | Author: wandaazhar@gmail.com */
   function forgotPassword()
   {
     $this->form_validation->set_rules('email', 'Email', 'required|valid_email', [
-      'required'  => '*email belum diisi'
+      'required'  => '*email belum diisi',
+      'valid_email' => '*Format email tidak benar'
     ]);
 
     if ($this->form_validation->run() == false) {
@@ -177,6 +168,9 @@ class Auth extends MX_Controller
     } else {
       $email = htmlspecialchars($this->input->post('email', true));
       $query = $this->db->get_where('tb_user_admin', ['email' => $email])->row_array();
+      $nama = $query['nama'];
+      // var_dump($nama);
+      // die;
 
       if ($query['email'] != $email) {
         $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible">
@@ -185,12 +179,93 @@ class Auth extends MX_Controller
         </div>');
         redirect('auth/forgotPassword');
       } else {
+        $token = $this->wandalibs->_getToken(32);
+        $dataToken = [
+          'nama'              => $nama,
+          'email'             => $email,
+          'token'             => $token,
+          'date_created'      => time()
+        ];
+        /* Note: mengirim token lewat email untuk verifikasi akun  | Author: wandaazhar@gmail.com */
+        $this->wandalibs->_sendEmail($token, 'forgot');
+        /* Note: insert token ke table form_token  | Author: wandaazhar@gmail.com */
+        $this->db->insert('form_token', $dataToken);
         $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible">
           <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-          <i class="icon fa fa-check"></i><small><b>Berhasil.</b>Silahkan cek ' . $email . ' untuk proses verifikasi</small>
+          <i class="icon fa fa-check"></i><small><b>Berhasil.</b>Silahkan cek email' . $email . ' untuk isi password baru Anda</small>
         </div>');
         redirect('auth/login');
       }
+    }
+  }
+
+  /* Note: Function untuk menampilkan halaman ubah password baru | Author: wandaazhar@gmail.com */
+  function pageResetPassword()
+  {
+    $email = $this->input->get('email');
+    $token = $this->input->get('token');
+    $query = $this->db->get_where('form_token', ['token' => $token])->row_array();
+    $nama = $query['nama'];
+    $emailDb = $query['email'];
+    // var_dump($emailDb);
+    // die;
+
+    if ($token != $query['token']) {
+      $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+      <i class="icon fa fa-exclamation-triangle"></i><small><b>Ups!.</b>Email ' . $email . ' sudah diverifkasi sebelumnya</small>
+    </div>');
+      redirect('auth/pageBlocked');
+    }
+    if ($email != $query['email']) {
+      $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+      <i class="icon fa fa-exclamation-triangle"></i><small><b>Ups!.</b>Email ' . $email . ' sudah tidak terdaftar</small>
+    </div>');
+      redirect('auth/pageBlocked');
+    }
+
+    $data['getEmail'] = $emailDb;
+    $data['getNama']  = $nama;
+    $this->load->view('v_ubah_password', $data);
+  }
+
+  function updatePassword()
+  {
+    $this->form_validation->set_rules('new_password1', 'Password Baru', 'required|trim|min_length[6]|matches[new_password2]', [
+      'required'    => '*Password belum diisi',
+      'matches'     => '*Password tidak sama'
+    ]);
+    $this->form_validation->set_rules('new_password2', 'Password Baru', 'required|trim|min_length[6]|matches[new_password1]', [
+      'required'    => '*Password belum diisi',
+      'matches'     => '*Password tidak sama'
+    ]);
+
+
+    if ($this->form_validation->run() == false) {
+      // $query = $this->db->get_where('form_token', ['token' => $token])->row_array();
+      // $nama = $query['nama'];
+      // $emailDb = $query['email'];
+
+      // $data['getEmail'] = $emailDb;
+      // $data['getNama']  = $nama;
+      // $this->load->view('v_ubah_password');
+      redirect('' . $_SERVER['HTTP_REFERER'] . '');
+    } else {
+      $email = $this->input->post('email');
+      $new_password     = password_hash($this->input->post('new_password1', true), PASSWORD_DEFAULT);
+
+      $this->db->set('password', $new_password);
+      $this->db->where('email', $email);
+      $this->db->update('tb_user_admin');
+
+      $this->db->delete('form_token', ['email' => $email]);
+
+      $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+      <i class="icon fa fa-check"></i><small><b>Selamat.</b> Password Anda berhasil diupdate</small>
+      </div>');
+      redirect('auth/login');
     }
   }
 
@@ -199,5 +274,11 @@ class Auth extends MX_Controller
   {
     $data['title']  = 'Ketentuan Registrasi User Admin';
     $this->load->view('ketentuan_user_admin', $data);
+  }
+
+  /* Note: Function untuk menampilkan halaman blocked jika ada user yag mencoba akses tanpa token | Author: wandaazhar@gmail.com */
+  function pageBlocked()
+  {
+    $this->load->view('v_blocked');
   }
 }

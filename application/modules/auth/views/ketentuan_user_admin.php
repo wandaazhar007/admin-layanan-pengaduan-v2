@@ -30,13 +30,18 @@
 
   <div class="container-fluid">
     <div class="row">
+      <div class="col-12 one-da-login-logo">
+        <img src="<?php echo base_url() ?>/assets/img/logo-rsu.png" alt="">
+      </div>
+    </div>
+    <div class="row">
       <div class="col-12">
         <h4 class="text-muted text-center">Ketentuan Admin Layanan Pengaduan</h4>
       </div>
     </div>
-    <div class="row">
+    <div class="row justify-content-center mt-4">
       <div class="col-12 col-sm-6 col-lg-4">
-        <div class="card card-primary card-outline card-tabs">
+        <div class="card card-success card-outline card-tabs">
           <div class="card-header p-0 pt-1 border-bottom-0">
             <ul class="nav nav-tabs" id="custom-tabs-two-tab" role="tablist">
               <li class="nav-item">

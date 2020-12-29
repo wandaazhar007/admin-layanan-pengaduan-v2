@@ -9,6 +9,7 @@ class Logout extends MX_Controller
   function logoutUser()
   {
     $email  = $this->session->userdata('email');
+    $name = $this->session->userdata('nama');
     $query  = $this->db->get_where('tb_user', ['email' => $email])->row_array();
     $dataSession = [
       'id'        => $query['id'],
@@ -28,7 +29,7 @@ class Logout extends MX_Controller
             <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
               <i class="nc-icon nc-simple-remove"></i>
             </button>
-            <span><small><b>Terimakasih - </b> Anda telah berhasil logout </span></small>
+            <span><small> <b>Terimakasih ' . $name . ' </b>. Anda telah berhasil logout </span></small>
           </div>');
     redirect('auth/login');
   }
