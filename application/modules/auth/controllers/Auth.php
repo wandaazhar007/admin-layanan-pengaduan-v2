@@ -27,8 +27,41 @@ class Auth extends MX_Controller
       $data['title']      = 'Admin Layanan Pengaduan | Login';
       $this->load->view('login', $data);
     } else {
-      /* Note: jika form_validation lolos, jalankan function login yang ada di libraries/wandalibs.php | Author: wandaazhar@gmail.com */
-      $this->wandalibs->_loginProcess();
+
+      $captcha_response = trim($this->input->post('g-recaptcha-response', true));
+      // var_dump($captcha_response);
+      // die;
+      if ($captcha_response != '') {
+        $keySecret = '6LdoiycaAAAAAGG3f0rN5fh2kw9YfgrMCKeiCyGR';
+        $check = [
+          'secret'    => $keySecret,
+          'response'  => $this->input->post('g-recaptcha-response')
+        ];
+        $startProccess = curl_init();
+        curl_setopt($startProccess, CURLOPT_URL, 'https://www.google.com/recaptcha/api/siteverify');
+        curl_setopt($startProccess, CURLOPT_POST, true);
+        curl_setopt($startProccess, CURLOPT_POSTFIELDS, http_build_query($check));
+        curl_setopt($startProccess, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($startProccess, CURLOPT_RETURNTRANSFER, true);
+
+        $receiveData = curl_exec($startProccess);
+        $final_response = json_decode($receiveData, true);
+
+        if ($final_response['success']) {
+          /* Note: jika form_validation lolos, jalankan function login yang ada di libraries/wandalibs.php | Author: wandaazhar@gmail.com */
+          $this->wandalibs->_loginProcess();
+        } else {
+          $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
+          Ups. Maaf Anda belum ceklis recaptcha!
+          </div>');
+          redirect('auth/login');
+        }
+      } else {
+        $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
+          Ups. Maaf Anda belum ceklis recaptcha!
+          </div>');
+        redirect('auth/login');
+      }
     }
   }
 
@@ -86,38 +119,73 @@ class Auth extends MX_Controller
       $data['title']      = 'Registrasi User | Admin Layanan Pengaduan';
       $this->load->view('form_register', $data);
     } else {
-      $nama         = htmlspecialchars($this->input->post('nama', true));
-      $email        = htmlspecialchars($this->input->post('email', true));
-      $bidang       = htmlspecialchars($this->input->post('bidang', true));
-      $password     = password_hash($this->input->post('password', true), PASSWORD_DEFAULT);
 
-      $data = [
-        'nama'        => $nama,
-        'email'       => $email,
-        'password'    => $password,
-        'bidang'      => $bidang,
-        'user_access' => 'pengguna',
-        'foto'        => 'default-avatar.png',
-        'password'    => $password,
-        'date_created' => time(),
-        'active'      => 'tidak aktif'
-      ];
 
-      $token = $this->wandalibs->_getToken(32);
-      $dataToken = [
-        'nama'              => $nama,
-        'email'             => $email,
-        'token'             => $token,
-        'date_created'      => time()
-      ];
-      $this->wandalibs->_sendEmail($token, 'verify'); /* Note: mengirim token lewat email untuk verifikasi akun  | Author: wandaazhar@gmail.com */
-      $this->db->insert('form_token', $dataToken); /* Note: Insert data ke tabel form_token | Author: wandaazhar@gmail.com */
-      $this->db->insert('tb_user_admin', $data); /* Note: Insert data ke tabel tb_user_admin | Author: wandaazhar@gmail.com */
-      $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible">
-      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-      <i class="icon fa fa-check"></i><small><b>Berhasil.</b>Silahkan cek email ' . $email . ' untuk proses verifikasi</small>
-    </div>');
-      redirect('auth/login');
+      $captcha_response = trim($this->input->post('g-recaptcha-response', true));
+      // var_dump($captcha_response);
+      // die;
+      if ($captcha_response != '') {
+        $keySecret = '6LdoiycaAAAAAGG3f0rN5fh2kw9YfgrMCKeiCyGR';
+        $check = [
+          'secret'    => $keySecret,
+          'response'  => $this->input->post('g-recaptcha-response')
+        ];
+        $startProccess = curl_init();
+        curl_setopt($startProccess, CURLOPT_URL, 'https://www.google.com/recaptcha/api/siteverify');
+        curl_setopt($startProccess, CURLOPT_POST, true);
+        curl_setopt($startProccess, CURLOPT_POSTFIELDS, http_build_query($check));
+        curl_setopt($startProccess, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($startProccess, CURLOPT_RETURNTRANSFER, true);
+
+        $receiveData = curl_exec($startProccess);
+        $final_response = json_decode($receiveData, true);
+
+        if ($final_response['success']) {
+          //store data to database
+          $nama         = htmlspecialchars($this->input->post('nama', true));
+          $email        = htmlspecialchars($this->input->post('email', true));
+          $bidang       = htmlspecialchars($this->input->post('bidang', true));
+          $password     = password_hash($this->input->post('password', true), PASSWORD_DEFAULT);
+
+          $data = [
+            'nama'        => $nama,
+            'email'       => $email,
+            'password'    => $password,
+            'bidang'      => $bidang,
+            'user_access' => 'pengguna',
+            'foto'        => 'default-avatar.png',
+            'password'    => $password,
+            'date_created' => time(),
+            'active'      => 'tidak aktif'
+          ];
+
+          $token = $this->wandalibs->_getToken(32);
+          $dataToken = [
+            'nama'              => $nama,
+            'email'             => $email,
+            'token'             => $token,
+            'date_created'      => time()
+          ];
+          $this->wandalibs->_sendEmail($token, 'verify'); /* Note: mengirim token lewat email untuk verifikasi akun  | Author: wandaazhar@gmail.com */
+          $this->db->insert('form_token', $dataToken); /* Note: Insert data ke tabel form_token | Author: wandaazhar@gmail.com */
+          $this->db->insert('tb_user_admin', $data); /* Note: Insert data ke tabel tb_user_admin | Author: wandaazhar@gmail.com */
+          $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <i class="icon fa fa-check"></i><small><b>Berhasil.</b>Silahkan cek email ' . $email . ' untuk proses verifikasi</small>
+          </div>');
+          redirect('auth/login');
+        } else {
+          $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
+          Ups. Maaf Anda belum ceklis recaptcha!
+          </div>');
+          redirect('home');
+        }
+      } else {
+        $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
+          Ups. Maaf Anda belum ceklis recaptcha!
+          </div>');
+        redirect('auth/registerUser');
+      }
     }
   }
 

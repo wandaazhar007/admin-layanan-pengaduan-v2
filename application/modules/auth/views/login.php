@@ -18,6 +18,8 @@
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
   <!-- oneda-cassading -->
   <link rel="stylesheet" href="<?php echo base_url() ?>/assets/one-da-css/one-da-cassading.css">
+  <!-- Rechapta Google -->
+  <script src="https://www.google.com/recaptcha/api.js"></script>
   <style>
     .ml14 {
       font-weight: 200;
@@ -94,14 +96,17 @@
             </div>
           </div>
           <small class="form-text text-danger font-italic"><?php echo form_error('password') ?></small>
+          <div class="form-group mt-3">
+            <div class="g-recaptcha" data-sitekey="6LdoiycaAAAAAO2YidCx7UFaVAedrowBK_QPDw9T"></div>
+          </div>
           <div class="row">
             <div class="col-12">
-              <button type="submit" class="btn btn-sm one-da-btn-login btn-tosca"> <i class="fa fa-power-off"></i> Sign In</button>
+              <button type="submit" class="btn btn-sm one-da-btn-login btn-tosca"> <i class="fa fa-power-off"></i> Login</button>
             </div>
           </div>
         </form>
         <p class="mb-0 one-da-text-unlink" style="font-size: 14px;">Tidak bisa login? <a href="<?php echo base_url('auth/forgotPassword') ?>" class="one-da-text-unlink one-da-text-tosca" style="font-size: 14px;">Lupa password</a></p>
-        <p class="mb-0 one-da-text-unlink" style="font-size: 14px;"> Belum punya akun? <a href="<?php echo base_url('auth/registerUser') ?>" class="one-da-text-unlink one-da-text-tosca">Register</a></p>
+        <p class="mb-0 one-da-text-unlink" style="font-size: 14px;"> Belum punya akun? <a href="<?php echo base_url('auth/registerUser') ?>" class="one-da-text-unlink one-da-text-tosca">Daftar</a></p>
       </div>
     </div>
   </div>
