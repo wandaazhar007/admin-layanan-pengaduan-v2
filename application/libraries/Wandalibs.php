@@ -210,7 +210,7 @@ class Wandalibs
       'protocol'      => 'smtp',
       'smtp_host'     => 'ssl://smtp.googlemail.com',
       'smtp_user'     => 'natrium.space007@gmail.com',
-      'smtp_pass'     => 'SB33JFCJ67HP',
+      'smtp_pass'     => '',
       // 'smtp_port'     =>  587,
       'smtp_port'     =>  465,
       'mailtype'      => 'html',
@@ -222,7 +222,7 @@ class Wandalibs
     //   'smtp_crypto'   => 'tls',
     //   'smtp_host'     => 'smtp.googlemail.com',
     //   'smtp_user'     => 'natrium.space007@gmail.com',
-    //   'smtp_pass'     => 'SB33JFCJ67HP',
+    //   'smtp_pass'     => '',
     //   // 'smtp_port'     =>  587,
     //   'smtp_port'     =>  465,
     //   'mailtype'      => 'html',
@@ -301,7 +301,7 @@ class Wandalibs
       'protocol'      => 'smtp',
       'smtp_host'     => 'ssl://smtp.googlemail.com',
       'smtp_user'     => 'natrium.space007@gmail.com',
-      'smtp_pass'     => 'SB33JFCJ67HP',
+      'smtp_pass'     => '',
       'smtp_port'     =>  465,
       'mailtype'      => 'html',
       'charset'       => 'utf-8'
@@ -311,8 +311,8 @@ class Wandalibs
     //     'protocol'      => 'smtp',
     //     'smtp_crypto'   => 'tls',
     //     'smtp_host'     => 'smtp.googlemail.com',
-    //     'smtp_user'     => 'promkesrsutangsel@gmail.com',
-    //     'smtp_pass'     => 'PkRs2017',
+    //     'smtp_user'     => 'natrium.space007@gmail.com',
+    //     'smtp_pass'     => '',
     //     'smtp_port'     =>  587,
     //     // 'smtp_port'     =>  465,
     //     'mailtype'      => 'html',
@@ -359,7 +359,7 @@ class Wandalibs
                 <h2>RSU Kota Tangerang Selatan</h2>
                 <h3>Hallo, ' . $CI->input->post('email') . '</h3>
                 <p>Pesan pengaduan anda sudah kami balas,cek balasan kami dengan klik tombol dibawah ini</p>
-                <a href="https://instagram.com/rsu_tangsel/"><button style="background-color="#fff"; color="#009999";">Cek Sekarang</button></a>
+                <a href="https://instagram.com/rsutangsel/"><button style="background-color="#fff"; color="#009999";">Cek Sekarang</button></a>
                 <p>(NO REPLY). Jangan balas email ini</p>
           </div>
         </body>
