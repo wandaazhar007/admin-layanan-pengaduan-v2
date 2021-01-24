@@ -13,6 +13,8 @@ class Inbox extends MX_Controller
   {
     // $this->wandalibs->restrictUserAccess($this->session->userdata('bidang'));
     $bidang = $this->session->userdata('bidang');
+    // var_dump($bidang);
+    // die;
     if ($bidang == 'promkes') {
       $data['title']                  = 'Layanan Pengaduan';
       $data['contentsMessage']        = 'list_inbox';
